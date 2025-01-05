@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Eurika-Discovery" />
+        <module name="Gateway-ms" />
+        <module name="test-ms" />
+        <module name="Prediction-ms" />
+        <module name="Type_Evenement_Enum-ms" />
+        <module name="ConfigServer-ms" />
+        <module name="demo" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Gatway-ms" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ConfigServer-ms" options="-parameters" />
+      <module name="Eurika-Discovery" options="-parameters" />
+      <module name="Gateway-ms" options="-parameters" />
+      <module name="Gatway-ms" options="-parameters" />
+      <module name="Prediction-ms" options="-parameters" />
+      <module name="Type_Evenement_Enum-ms" options="-parameters" />
+      <module name="demo" options="-parameters" />
+      <module name="test-ms" options="-parameters" />
+    </option>
+  </component>
+</project>

@@ -15,6 +15,15 @@
         <module name="ConfigServer-ms" />
         <module name="demo" />
       </profile>
+      <profile name="Annotation profile for Evenement" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="Evenement" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Gatway-ms" target="21" />
@@ -24,6 +33,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ConfigServer-ms" options="-parameters" />
       <module name="Eurika-Discovery" options="-parameters" />
+      <module name="Evenement" options="-parameters" />
       <module name="Gateway-ms" options="-parameters" />
       <module name="Gatway-ms" options="-parameters" />
       <module name="Prediction-ms" options="-parameters" />

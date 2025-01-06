@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/ConfigServer-ms/pom.xml" />
         <option value="$PROJECT_DIR$/Prediction-ms/pom.xml" />
         <option value="$PROJECT_DIR$/Type_Evenement_Enum-ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Evenement-ms/pom.xml" />
       </list>
     </option>
   </component>

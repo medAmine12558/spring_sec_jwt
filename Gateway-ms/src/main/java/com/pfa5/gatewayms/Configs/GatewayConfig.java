@@ -31,6 +31,9 @@ public class GatewayConfig {
                 .route("pred",r->r.path("/pred/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://PREDICTION-MS"))
+                .route("event",r->r.path("/evenement/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://EVENEMENT"))
                 .build();
     }
 

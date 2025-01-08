@@ -25,8 +25,16 @@ public class Prediction {
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate date;
     @Transient
-    private List<User> user=new ArrayList<>();
+    private User user;
     @Transient
     private Evenement evenement;
+    private Integer id_evenement;
+    private Integer id_user;
+    public Prediction(String photo, String prediction, LocalDate date,Evenement evenement) {
+        this.photo = photo;
+        this.prediction = prediction;
+        this.date = date;
+        this.evenement = evenement;
+    }
 
 }

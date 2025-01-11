@@ -16,4 +16,7 @@ public class PredictionService {
     public Prediction findById(int id) {
         return predictionRepo.findById(id).get();
     }
+    public String getCountOfPredictionsByYear(String predection ,String year) {
+        return String.valueOf(predictionRepo.findByPredictionAndDateContaining(predection,year).size());
+    }
 }

@@ -2,6 +2,7 @@ package com.pfa5.predictionms.Controller;
 import com.netflix.discovery.converters.Auto;
 import com.pfa5.predictionms.Entities.Prediction;
 import com.pfa5.predictionms.Model.Evenement;
+import com.pfa5.predictionms.Repo.PredictionRepo;
 import com.pfa5.predictionms.Services.EvenementRestClient;
 import com.pfa5.predictionms.Services.PredictionService;
 import com.pfa5.predictionms.Services.UserRestClient;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pred")
@@ -23,6 +27,8 @@ public class PredictionController {
     EvenementRestClient evenementRestClient;
     @Autowired
     UserRestClient userRestClient;
+    @Autowired
+    private PredictionRepo predictionRepo;
 
     @GetMapping("/test")
     public String test() {
@@ -54,6 +60,16 @@ public class PredictionController {
     @GetMapping("/Prediction/{id}")
         public ResponseEntity<Prediction> getPrediction(@PathVariable int id) {
         return ResponseEntity.ok(predictionService.findById(id));
+    }
+    @GetMapping("/statisticDate")
+    public ResponseEntity<Map<String,String>> getPredictionDate(@RequestBody Map<String , String> data) {
+        String year=data.get("annee");
+        Map<String,String> map=new HashMap<>();
+        map.put("happy",predictionService.getCountOfPredictionsByYear("happy",year));
+        map.put("sad",predictionService.getCountOfPredictionsByYear("sad",year));
+        map.put("angry",predictionService.getCountOfPredictionsByYear("angry",year));
+        return ResponseEntity.ok(map);
+
     }
 
 

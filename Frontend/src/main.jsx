@@ -8,6 +8,7 @@ import { Home } from './Components/Home.jsx';
 import { Signin } from './Components/Signin.jsx';
 import { Signup } from './Components/Signup.jsx';
 import { Predection_Page } from './Components/Prediction_page.jsx';
+import Dashboard from './Components/Dashboard.jsx';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/Signin" element={<Signin />} />
         <Route path="/SignUP" element={<Signup />} />
         <Route path="/Pred" element={<Predection_Page />} />
+        <Route path="/adminpage" element={<Dashboard />} />
       </Routes>
     </Router>
   </React.StrictMode>

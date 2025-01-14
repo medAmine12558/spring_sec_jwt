@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/pred")
@@ -41,7 +38,7 @@ public class PredictionController {
             prediction.getEvenement().setId(0);
         }
         if(evenementRestClient.evenementPresent(prediction.getEvenement().getId())){
-            prediction.setId_evenement(prediction.getEvenement().getId());
+            prediction.setIdEvenement(prediction.getEvenement().getId());
             prediction.setUser(userRestClient.getMe(token));
             prediction.setId_user(prediction.getUser().getId());
             Prediction p=predictionService.save(prediction);
@@ -49,7 +46,7 @@ public class PredictionController {
         }else {
             prediction.getEvenement().setId(null);
             Evenement savedEvenement = evenementRestClient.saveEvenement(prediction.getEvenement());
-            prediction.setId_evenement(savedEvenement.getId());
+            prediction.setIdEvenement(savedEvenement.getId());
             prediction.setUser(userRestClient.getMe(token));
             prediction.setId_user(prediction.getUser().getId());
             Prediction p = predictionService.save(prediction);
@@ -62,13 +59,45 @@ public class PredictionController {
         return ResponseEntity.ok(predictionService.findById(id));
     }
     @GetMapping("/statisticDate")
-    public ResponseEntity<Map<String,String>> getPredictionDate(@RequestBody Map<String , String> data) {
+    public ResponseEntity<List<Map<String,String>>> getPredictionDate(@RequestParam Map<String , String> data) {
         String year=data.get("annee");
-        Map<String,String> map=new HashMap<>();
-        map.put("happy",predictionService.getCountOfPredictionsByYear("happy",year));
-        map.put("sad",predictionService.getCountOfPredictionsByYear("sad",year));
-        map.put("angry",predictionService.getCountOfPredictionsByYear("angry",year));
-        return ResponseEntity.ok(map);
+        List<Map<String,String>> l=new ArrayList<>();
+        Map<String,String> happymap=new HashMap<>();
+        happymap.put("emotion","happy");
+        happymap.put("prediction",predictionService.getCountOfPredictionsByYear("happy",year));
+        l.add(happymap);
+        Map<String,String> sadmap=new HashMap<>();
+        sadmap.put("emotion","sad");
+        sadmap.put("prediction",predictionService.getCountOfPredictionsByYear("sad",year));
+        l.add(sadmap);
+        Map<String,String> angreymap=new HashMap<>();
+        angreymap.put("emotion","angrey");
+        angreymap.put("prediction",predictionService.getCountOfPredictionsByYear("angrey",year));
+        l.add(angreymap);
+        return ResponseEntity.ok(l);
+
+    }
+    @GetMapping("/statisticEvenement")
+    public ResponseEntity<List<Map<String,String>>> getPredictionEvenement(@RequestParam Map<String , String> data) {
+        Integer id_event=Integer.valueOf(data.get("id_event"));
+        Integer counthappy=0;
+        List<Map<String,String>> l=new ArrayList<>();
+        //pour l'emotion happy
+        Map<String,String> happymap=new HashMap<>();
+        happymap.put("emotion","happy");
+        happymap.put("number",String.valueOf(predictionService.findById_evenement((id_event)).stream().filter(i-> i.getPrediction().equals("happy")).count()));
+        l.add(happymap);
+        //pour l'emotion sad
+        Map<String,String> sadmap=new HashMap<>();
+        sadmap.put("emotion","sad");
+        sadmap.put("number",String.valueOf(predictionService.findById_evenement((id_event)).stream().filter(i-> i.getPrediction().equals("sad")).count()));
+        l.add(sadmap);
+        //pour l'emotion angrey
+        Map<String,String> angreymap=new HashMap<>();
+        angreymap.put("emotion","angrey");
+        angreymap.put("number",String.valueOf(predictionService.findById_evenement((id_event)).stream().filter(i-> i.getPrediction().equals("angrey")).count()));
+        l.add(angreymap);
+        return ResponseEntity.ok(l);
 
     }
 

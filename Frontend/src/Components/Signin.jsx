@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Eye } from 'lucide-react';
+import axios from 'axios';
 
 export function Signin() {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,7 +9,13 @@ export function Signin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values)
+    axios.post("http://localhost:8090/auth/login",values).then(res=>{
+      console.log(res.data.token);
+      sessionStorage.setItem("token",res.data.token)
+      sessionStorage.setItem("expirationLimit",res.data.expiresIn)
+    }).catch(e=>{
+      console.log(e);
+    })
   };
   function onchaneValues(titre_input,value){
     setValues((prev)=>({

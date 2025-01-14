@@ -27,7 +27,7 @@ public class Prediction {
     private User user;
     @Transient
     private Evenement evenement;
-    private Integer id_evenement;
+    private Integer idEvenement;
     private Integer id_user;
     public Prediction(String photo, String prediction,Evenement evenement) {
         this.photo = photo;

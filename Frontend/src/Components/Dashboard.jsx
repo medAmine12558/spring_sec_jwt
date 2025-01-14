@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Home,
   Users, 
@@ -30,13 +30,85 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useAxiosInstance } from './hook/AxiosHook';
+
 
 export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [year,setYear]=useState('2025');
+  const [emotion_statistics_date,setEmotion_statistics_date]=useState([])
+  const axiosInstance = useAxiosInstance();
+  const [evenements,setEvenements]=useState([])
+  const [evenement_id,setEvenement_id]=useState(0)
+  const [evenement_statistics,setEvenement_statistics]=useState([])
+
+  useEffect(()=>{
+    axiosInstance.get("/pred/statisticDate",{params: {
+      annee: year
+    }}).then(res=>{
+      setEmotion_statistics_date(res.data)
+      console.log(emotion_statistics_date)
+    }).catch(e=>{
+      console.error("Erreur lors de la récupération des statistiques :", e.response ? e.response.data : e.message);
+    })
+    
+  },[year,axiosInstance])
+
+  useEffect(()=>{
+    const getEvenements = async () => {
+      const res = await axiosInstance.get("/evenement/AllEvenements");
+      setEvenements(res.data)
+      setEvenement_id(res.data[0].id)
+      
+    }
+    getEvenements()
+    },[]
+  )
+
+  useEffect(()=>{
+      axiosInstance.get("/pred/statisticEvenement",{
+      params: {
+        id_event: evenement_id
+      }
+    })
+    .then(res=>{
+      setEvenement_statistics(res.data)
+    }).catch(e=>{
+      console.error("Erreur lors de la récupération des statistiques :", e.response ? e.response.data : e.message);
+    })
+  },[evenement_id])
+
+  if(!evenements){
+    return <div>loading...</div>
+
+  }
+
+    //fonction pour afficher une liste ordonner pour choisir l'evenement sur le quel on veut afficher les statistique des prediction dans cet evenement
+
+  const valueofevents = () => {
+    return(
+      <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label"></InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={evenement_id}
+          label="evenements"
+          onChange={(e)=>{setEvenement_id(e.target.value)}}
+        >
+          {evenements.map((event, index) => (
+            <MenuItem key={index} value={event.id}>{event.description}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+    )
+  }
 
   //fonction pour afficher une liste ordonner pour choisir l'annee sur la quelle on veut afficher les statistique des prediction dans cette annee
   const valueofyears = () => {
-    const [year,setYear]=useState()
+   
     return(
         <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
@@ -45,30 +117,22 @@ export default function Dashboard() {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={year}
-          label="Age"
+          label="year"
           onChange={(e)=>{setYear(e.target.value)}}
         >
-          <MenuItem value={10}>2020</MenuItem>
-          <MenuItem value={20}>2021</MenuItem>
-          <MenuItem value={30}>2022</MenuItem>
-          <MenuItem value={30}>2023</MenuItem>
-          <MenuItem value={30}>2024</MenuItem>
-          <MenuItem value={30}>2025</MenuItem>
+          <MenuItem value={"2020"}>2020</MenuItem>
+          <MenuItem value={"2021"}>2021</MenuItem>
+          <MenuItem value={"2022"}>2022</MenuItem>
+          <MenuItem value={"2023"}>2023</MenuItem>
+          <MenuItem value={"2024"}>2024</MenuItem>
+          <MenuItem value={"2025"}>2025</MenuItem>
         </Select>
       </FormControl>
     </Box>
     )
   }
   
-  // Données pour les graphiques
-  const userActivityData = [
-    { mois: 'Jan', actifs: 400, nouveaux: 240, inactifs: 200 },
-    { mois: 'Fév', actifs: 300, nouveaux: 139, inactifs: 220 },
-    { mois: 'Mar', actifs: 600, nouveaux: 380, inactifs: 250 },
-    { mois: 'Avr', actifs: 800, nouveaux: 520, inactifs: 210 },
-    { mois: 'Mai', actifs: 500, nouveaux: 380, inactifs: 260 },
-    { mois: 'Juin', actifs: 700, nouveaux: 429, inactifs: 230 }
-  ];
+
 
   const conversionData = [
     { name: 'Visites', value: 1000 },
@@ -77,12 +141,6 @@ export default function Dashboard() {
   ];
 
   //ajuster la structure de la reponse de mon api pour qu'il soit asemble a cette structure
-  const emotion_statistics_date = [
-    { emotion: 'happy', prediction: 40 },
-    { emotion: 'sad', prediction: 35 },
-    { emotion: 'angrey', prediction: 9 }
-   
-  ];
 
   const sessionData = [
     { heure: '00h', sessions: 120 },
@@ -92,8 +150,6 @@ export default function Dashboard() {
     { heure: '16h', sessions: 500 },
     { heure: '20h', sessions: 300 }
   ];
-  
-  const years=[2020,2021,2022,2023,2024,2025]
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
@@ -111,9 +167,6 @@ export default function Dashboard() {
           
           {[
             { icon: Home, label: 'Dashboard', active: true },
-            { icon: Users, label: 'Utilisateurs' },
-            { icon: Activity, label: 'Activités' },
-            { icon: Settings, label: 'Paramètres' }
           ].map((item, index) => (
             <button
               key={index}
@@ -158,22 +211,21 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Activité des utilisateurs */}
             <div className="bg-white p-6 rounded-xl shadow-lg">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Activité des Utilisateurs</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">evenements :  {valueofevents()}</h3>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={userActivityData}>
+                  <BarChart data={evenement_statistics}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="mois" />
+                    <XAxis dataKey="emotion" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Area type="monotone" dataKey="actifs" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                    <Area type="monotone" dataKey="nouveaux" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                    <Area type="monotone" dataKey="inactifs" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                  </AreaChart>
+                    <Bar dataKey="number" fill="#3b82f6" />
+                  </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
+
 
             {/* Taux de conversion */}
             <div className="bg-white p-6 rounded-xl shadow-lg">

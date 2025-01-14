@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PredictionRepo extends JpaRepository<Prediction, Integer> {
     public List<Prediction> findByPredictionAndDateContaining(String prediction, String date);
+    public List<Prediction> findByIdEvenement(Integer id_evenement);
 }

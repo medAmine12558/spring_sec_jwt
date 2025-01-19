@@ -7,10 +7,11 @@ import { useAxiosInstance } from './hook/AxiosHook';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 
+
 export function Predection_Page(){
   const [photo, setPhoto] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [evenement,setEvenement] = useState(1);
+  const [evenement,setEvenement] = useState("");
   const axiosInstance = useAxiosInstance();
   const [evenements,setEvenements] = useState([]);
   const [prediction,setPrediction] = useState(null);
@@ -18,6 +19,8 @@ export function Predection_Page(){
   function handleFile (file){
     setPhoto(file)
   };
+
+ 
 
   useEffect(()=>{
     axiosInstance.get("/evenement/AllEvenements").then(res=>{
@@ -28,8 +31,9 @@ export function Predection_Page(){
   },[])
 
   useEffect(()=>{
-    console.log(prediction)
-  },[prediction])
+    if(evenement){
+    console.log(JSON.parse(evenement))}
+  },[evenement])
 
 
   useEffect(()=>{
@@ -53,9 +57,15 @@ export function Predection_Page(){
   };
 
   function handelSubmit(){
-    const formData = new FormData();
-    formData.append('', photo);
-    axiosInstance.post("/pred/save")
+    const data ={
+      prediction:prediction,
+      evenement:JSON.parse(evenement)
+    }
+    axiosInstance.post("/pred/save",data).then(res=>{
+      console.log(res.data)
+      }).catch(e=>{
+        console.log(e.response.data.message)
+      })
     }
 
     if(evenements.length === 0){
@@ -166,16 +176,16 @@ export function Predection_Page(){
             <div className="relative">
               <select
                 value={evenement}
-                onChange={(e) => setEvenement(e.target.value)}
+                onChange={(e) => {setEvenement(e.target.value)}}
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all appearance-none bg-white cursor-pointer"
               >
                 <option value="" disabled>Sélectionnez un événement</option>
                 {evenements.map((option,index) => (
-                  <option key={index} value={option.id}>
+                  <option key={index} value={JSON.stringify(option)}>
                     {option.description}
                   </option>
                 ))}
-                <option value={"add_new"}>+ Ajouter un evenement</option>
+                
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

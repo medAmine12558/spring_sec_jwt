@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Eye } from 'lucide-react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 export function Signin() {
   const [showPassword, setShowPassword] = useState(false);
    const [values,setValues] = useState({email: '', password: '' });
   const [emailError, setEmailError] = useState(false);
+  const Navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,10 +16,18 @@ export function Signin() {
       console.log(res.data.token);
       sessionStorage.setItem("token",res.data.token)
       sessionStorage.setItem("expirationLimit",res.data.expiresIn)
+      const decoded = jwtDecode(res.data.token)
+      console.log(decoded);
+      if(decoded.roles[0] === "ROLE_admin"){
+        Navigate("/adminpage")
+      }else{
+        Navigate("/Pred")
+      }
     }).catch(e=>{
       console.log(e);
     })
   };
+
   function onchaneValues(titre_input,value){
     setValues((prev)=>({
         ...prev,

@@ -22,7 +22,7 @@ public class DataLoader implements CommandLineRunner {
         prediction1.setIdEvenement(1);
         Prediction prediction2=new Prediction("sad",e);
         prediction2.setIdEvenement(1);
-        Prediction prediction3=new Prediction("angrey",e);
+        Prediction prediction3=new Prediction("angry",e);
         prediction3.setIdEvenement(1);
         Prediction prediction4=new Prediction("happy",e);
         prediction4.setIdEvenement(1);
@@ -32,7 +32,7 @@ public class DataLoader implements CommandLineRunner {
         Prediction prediction6=new Prediction("sad",e);
         prediction6.setIdEvenement(1);
         prediction6.setDate("2024-05-23");
-        Prediction prediction7=new Prediction("angrey",e);
+        Prediction prediction7=new Prediction("angry",e);
         prediction7.setIdEvenement(1);
         prediction7.setDate("2024-05-23");
         predictionRepo.save(prediction1);

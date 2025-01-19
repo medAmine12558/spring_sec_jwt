@@ -33,6 +33,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useAxiosInstance } from './hook/AxiosHook';
 import Checkbox from './uicomponents/Checkbox';
+import { jwtDecode } from 'jwt-decode';
 
 
 export default function Dashboard() {
@@ -46,6 +47,7 @@ export default function Dashboard() {
   const [evenement_statistics_porcentage,setEvenement_statistics_porcentage]=useState([])
   const [event_description,setEvent_description]=useState("Les évènements de service communautaire")
   const [nbr_emotions_per_year,setNbr_emotions_per_year]=useState([])
+  const [name,setName]=useState("")
 
   //ces couleurs est pour coloer chaque partie de prediction dans la section de statistique en pourcentage 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
@@ -62,6 +64,16 @@ export default function Dashboard() {
     })
     
   },[year,axiosInstance])
+
+
+   useEffect(()=>{
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        const decoded = jwtDecode(token)
+        setName(decoded.full_name)
+        }
+    
+    },[])
 
   //ici je recupere les evenements pour les afficher dans une liste ordonner et pour choisir l'evenement sur le quel on veut afficher les statistique des prediction dans cet evenement
   useEffect(()=>{
@@ -181,15 +193,6 @@ export default function Dashboard() {
     )
   }
 
-  const sessionData = [
-    { heure: '00h', sessions: 120 },
-    { heure: '04h', sessions: 80 },
-    { heure: '08h', sessions: 400 },
-    { heure: '12h', sessions: 600 },
-    { heure: '16h', sessions: 500 },
-    { heure: '20h', sessions: 300 }
-  ];
-
   
 
   return (
@@ -241,7 +244,7 @@ export default function Dashboard() {
             </button>
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                A
+                {name.charAt(0)}
               </div>
             </div>
           </div>
@@ -345,7 +348,7 @@ export default function Dashboard() {
             />
             <Line 
               type="monotone" 
-              dataKey="angrey" 
+              dataKey="angry" 
               stroke="#ef4444" 
               strokeWidth={2} 
               name="angrey"

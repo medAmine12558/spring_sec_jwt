@@ -3,22 +3,41 @@ import { Upload, Image as ImageIcon } from 'lucide-react';
 import axios from 'axios';
 import {  Camera, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { useAxiosInstance } from './hook/AxiosHook';
+import Skeleton from '@mui/material/Skeleton';
+import Box from '@mui/material/Box';
 
 export function Predection_Page(){
   const [photo, setPhoto] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [evenement,setEvenement] = useState(null);
+  const [evenement,setEvenement] = useState(1);
+  const axiosInstance = useAxiosInstance();
+  const [evenements,setEvenements] = useState([]);
+  const [prediction,setPrediction] = useState(null);
 
   function handleFile (file){
     setPhoto(file)
   };
+
+  useEffect(()=>{
+    axiosInstance.get("/evenement/AllEvenements").then(res=>{
+      setEvenements(res.data)
+    }).catch(e=>{
+      console.log(e.response.data.message)
+    })
+  },[])
+
+  useEffect(()=>{
+    console.log(prediction)
+  },[prediction])
+
+
   useEffect(()=>{
     const formData = new FormData();
     formData.append('file', photo);
     formData.append('evenement',evenement)
     axios.post("http://localhost:5000/predict",formData,{headers:{'Content-Type':'multipart/form-data'}}).then(res=>
-        console.log(res.data.prediction)
+        setPrediction(res.data.prediction)
        
     ).catch(e=>{
         console.log("erreur")
@@ -32,11 +51,26 @@ export function Predection_Page(){
     handleFile(file);
     
   };
+
   function handelSubmit(){
-    
+    const formData = new FormData();
+    formData.append('', photo);
+    axiosInstance.post("/pred/save")
     }
 
-  
+    if(evenements.length === 0){
+      return(
+        <div className="flex items-center justify-center min-h-screen w-full">
+          <div className="w-[300px] max-w-full">
+            <Box sx={{ width: 300 }}>
+              <Skeleton />
+              <Skeleton animation="wave" />
+              <Skeleton animation={false} />
+            </Box>
+          </div>
+        </div>
+      );
+    }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-blue-50 p-8">
@@ -130,13 +164,24 @@ export function Predection_Page(){
 
           <div className="mt-8 space-y-6">
             <div className="relative">
-              <input
-                type="text"
-                placeholder="Nom de l'événement"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all"
-                onChange={(e) => setEvenement(e.target.value)}
+              <select
                 value={evenement}
-              />
+                onChange={(e) => setEvenement(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none transition-all appearance-none bg-white cursor-pointer"
+              >
+                <option value="" disabled>Sélectionnez un événement</option>
+                {evenements.map((option,index) => (
+                  <option key={index} value={option.id}>
+                    {option.description}
+                  </option>
+                ))}
+                <option value={"add_new"}>+ Ajouter un evenement</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
 
             <motion.button

@@ -16,23 +16,23 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Evenement e=new Evenement("ok", Type_Evenement_Enum.Event1);
-        Prediction prediction=new Prediction("/photo","happy",e);
+        Prediction prediction=new Prediction("happy",e);
         prediction.setIdEvenement(1);
-        Prediction prediction1=new Prediction("/photo1","happy",e);
+        Prediction prediction1=new Prediction("happy",e);
         prediction1.setIdEvenement(1);
-        Prediction prediction2=new Prediction("/photo2","sad",e);
+        Prediction prediction2=new Prediction("sad",e);
         prediction2.setIdEvenement(1);
-        Prediction prediction3=new Prediction("/photo3","angrey",e);
+        Prediction prediction3=new Prediction("angrey",e);
         prediction3.setIdEvenement(1);
-        Prediction prediction4=new Prediction("/photo4","happy",e);
+        Prediction prediction4=new Prediction("happy",e);
         prediction4.setIdEvenement(1);
-        Prediction prediction5=new Prediction("/photo4","happy",e);
+        Prediction prediction5=new Prediction("happy",e);
         prediction5.setIdEvenement(1);
         prediction5.setDate("2024-05-23");
-        Prediction prediction6=new Prediction("/photo4","sad",e);
+        Prediction prediction6=new Prediction("sad",e);
         prediction6.setIdEvenement(1);
         prediction6.setDate("2024-05-23");
-        Prediction prediction7=new Prediction("/photo4","angrey",e);
+        Prediction prediction7=new Prediction("angrey",e);
         prediction7.setIdEvenement(1);
         prediction7.setDate("2024-05-23");
         predictionRepo.save(prediction1);

@@ -24,4 +24,7 @@ public class PredictionService {
     public List<Prediction> findById_evenement(Integer id_evenement) {
         return predictionRepo.findByIdEvenement(id_evenement);
     }
+    public List<Prediction> findAll() {
+        return predictionRepo.findAll();
+    }
 }

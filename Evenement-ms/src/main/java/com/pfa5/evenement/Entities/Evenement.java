@@ -17,8 +17,9 @@ public class Evenement {
     private Type_Evenement_Enum type;
 
     public Evenement(){}
-    public Evenement(String description, Type_Evenement_Enum type) {
-        this.description = description;
+
+
+    public Evenement(Type_Evenement_Enum type) {
         this.type = type;
     }
     public int getId() {

@@ -98,8 +98,55 @@ public class PredictionController {
         angreymap.put("number",String.valueOf(predictionService.findById_evenement((id_event)).stream().filter(i-> i.getPrediction().equals("angrey")).count()));
         l.add(angreymap);
         return ResponseEntity.ok(l);
-
     }
+    @GetMapping("/statisticAllYears")
+    public ResponseEntity<List<Map<String,Integer>>> getPredictionAllYears() {
+        List<Map<String,Integer>> l=new ArrayList<>();
+        //pour les predictions dans 2020
+        Map<String,Integer> map2020=new HashMap<>();
+        map2020.put("year",2020);
+        map2020.put("happy", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2020")).filter(r -> r.getPrediction().equals("happy")).count());
+        map2020.put("sad", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2020")).filter(r -> r.getPrediction().equals("sad")).count());
+        map2020.put("angrey", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2020")).filter(r -> r.getPrediction().equals("angrey")).count());
+        //pour les predictions dans 2021
+        Map<String,Integer> map2021=new HashMap<>();
+        map2021.put("year",2021);
+        map2021.put("happy", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2021")).filter(r -> r.getPrediction().equals("happy")).count());
+        map2021.put("sad", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2021")).filter(r -> r.getPrediction().equals("sad")).count());
+        map2021.put("angrey", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2021")).filter(r -> r.getPrediction().equals("angrey")).count());
+        //pour les predictions dans 2022
+        Map<String,Integer> map2022=new HashMap<>();
+        map2022.put("year",2022);
+        map2022.put("happy", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2022")).filter(r -> r.getPrediction().equals("happy")).count());
+        map2022.put("sad", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2022")).filter(r -> r.getPrediction().equals("sad")).count());
+        map2022.put("angrey", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2022")).filter(r -> r.getPrediction().equals("angrey")).count());
+        //pour les predictions dans 2023
+        Map<String,Integer> map2023=new HashMap<>();
+        map2023.put("year",2023);
+        map2023.put("happy", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2023")).filter(r -> r.getPrediction().equals("happy")).count());
+        map2023.put("sad", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2023")).filter(r -> r.getPrediction().equals("sad")).count());
+        map2023.put("angrey", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2023")).filter(r -> r.getPrediction().equals("angrey")).count());
+        //pour les predictions dans 2024
+        Map<String,Integer> map2024=new HashMap<>();
+        map2024.put("year",2024);
+        map2024.put("happy", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2024")).filter(r -> r.getPrediction().equals("happy")).count());
+        map2024.put("sad", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2024")).filter(r -> r.getPrediction().equals("sad")).count());
+
+        //pour les predictions dans 2025
+        Map<String,Integer> map2025=new HashMap<>();
+        map2025.put("year",2025);
+        map2025.put("happy", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2025")).filter(r -> r.getPrediction().equals("happy")).count());
+        map2025.put("sad", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2025")).filter(r -> r.getPrediction().equals("sad")).count());
+        map2025.put("angrey", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2025")).filter(r -> r.getPrediction().equals("angrey")).count());map2024.put("angrey", (int) predictionService.findAll().stream().filter(r -> r.getDate().contains("2024")).filter(r -> r.getPrediction().equals("angrey")).count());
+        //ajouter les dictionnaires dans la list l
+        l.add(map2020);
+        l.add(map2021);
+        l.add(map2022);
+        l.add(map2023);
+        l.add(map2024);
+        l.add(map2025);
+        return ResponseEntity.ok(l);
+        }
 
 
 }

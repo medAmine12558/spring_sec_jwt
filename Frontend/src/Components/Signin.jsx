@@ -24,7 +24,7 @@ export function Signin() {
         Navigate("/Pred")
       }
     }).catch(e=>{
-      console.log(e);
+      setEmailError("votre email est incorrect")
     })
   };
 
@@ -54,10 +54,12 @@ export function Signin() {
               onChange={(e) => onchaneValues('email',e.target.value)}
               className="w-full p-2 border rounded-md"
               placeholder="exemple@gmail.com"
+              error={!! emailError} 
+              helperText={emailError}
             />
             {emailError && (
               <div className="bg-black text-white text-sm p-2 mt-1 rounded">
-                Veuillez renseigner ce champ.
+                votre email ou password est incorrect 😭
               </div>
             )}
           </div>

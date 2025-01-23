@@ -6,6 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAxiosInstance } from './hook/AxiosHook';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import CustomizedSnackbars from './uicomponents/Snackbar';
 
 
 export function Predection_Page(){
@@ -15,6 +18,7 @@ export function Predection_Page(){
   const axiosInstance = useAxiosInstance();
   const [evenements,setEvenements] = useState([]);
   const [prediction,setPrediction] = useState(null);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
 
   function handleFile (file){
     setPhoto(file)
@@ -41,10 +45,12 @@ export function Predection_Page(){
     formData.append('file', photo);
     formData.append('evenement',evenement)
     axios.post("http://localhost:5000/predict",formData,{headers:{'Content-Type':'multipart/form-data'}}).then(res=>
-        setPrediction(res.data.prediction)
+        setPrediction(res.data.prediction),
+        
        
     ).catch(e=>{
         console.log("erreur")
+        
     })
   },[photo])
 
@@ -63,8 +69,10 @@ export function Predection_Page(){
     }
     axiosInstance.post("/pred/save",data).then(res=>{
       console.log(res.data)
+      setOpenSnackBar(true)
       }).catch(e=>{
         console.log(e.response.data.message)
+        setOpenSnackBar(false)
       })
     }
 
@@ -205,5 +213,8 @@ export function Predection_Page(){
           </div>
         </motion.div>
       </motion.div>
+      {openSnackBar && (
+        <CustomizedSnackbars text={"l'emotion de cette image est bien enregistre ✅"}></CustomizedSnackbars>
+      )}
     </div>);
 };

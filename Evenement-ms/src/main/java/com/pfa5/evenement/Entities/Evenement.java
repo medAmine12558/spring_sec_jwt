@@ -1,9 +1,7 @@
 package com.pfa5.evenement.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +12,14 @@ public class Evenement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @Column(nullable = true)
     private String description;
     private Type_Evenement_Enum type;
+
     public Evenement(){}
-    public Evenement(String description, Type_Evenement_Enum type) {
-        this.description = description;
+
+
+    public Evenement(Type_Evenement_Enum type) {
         this.type = type;
     }
     public int getId() {
@@ -30,10 +31,15 @@ public class Evenement {
     public String getDescription() {
         return description;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public Evenement setDescription(String description) {
+         this.description = description;
+         return this;
     }
     public Type_Evenement_Enum getType() {
         return type;
+    }
+
+    public void setType(Type_Evenement_Enum type) {
+        this.type = type;
     }
 }

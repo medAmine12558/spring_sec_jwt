@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
 import { Eye } from 'lucide-react';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 export function Signin() {
   const [showPassword, setShowPassword] = useState(false);
    const [values,setValues] = useState({email: '', password: '' });
   const [emailError, setEmailError] = useState(false);
+  const Navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(values)
+    axios.post("http://localhost:8090/auth/login",values).then(res=>{
+      console.log(res.data.token);
+      sessionStorage.setItem("token",res.data.token)
+      sessionStorage.setItem("expirationLimit",res.data.expiresIn)
+      const decoded = jwtDecode(res.data.token)
+      console.log(decoded);
+      if(decoded.roles[0] === "ROLE_admin"){
+        Navigate("/adminpage")
+      }else{
+        Navigate("/Pred")
+      }
+    }).catch(e=>{
+      setEmailError("votre email est incorrect")
+    })
   };
+
   function onchaneValues(titre_input,value){
     setValues((prev)=>({
         ...prev,
@@ -36,10 +54,12 @@ export function Signin() {
               onChange={(e) => onchaneValues('email',e.target.value)}
               className="w-full p-2 border rounded-md"
               placeholder="exemple@gmail.com"
+              error={!! emailError} 
+              helperText={emailError}
             />
             {emailError && (
               <div className="bg-black text-white text-sm p-2 mt-1 rounded">
-                Veuillez renseigner ce champ.
+                votre email ou password est incorrect 😭
               </div>
             )}
           </div>

@@ -20,20 +20,16 @@ public class Prediction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String photo;
     private String prediction;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate date;
+    private String date=LocalDate.now().toString();
     @Transient
     private User user;
     @Transient
     private Evenement evenement;
-    private Integer id_evenement;
+    private Integer idEvenement;
     private Integer id_user;
-    public Prediction(String photo, String prediction, LocalDate date,Evenement evenement) {
-        this.photo = photo;
+    public Prediction(String prediction,Evenement evenement) {
         this.prediction = prediction;
-        this.date = date;
         this.evenement = evenement;
     }
 
